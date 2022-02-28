@@ -139,6 +139,36 @@ const svg2 = d3
 
 d3.csv("data/barchart.csv").then((data) => { 
  
+let maxY1 = d3.max(data, function(d) { return d.score; }); // finds max score val from data1
+
+// TODO: What does each line of this code do?
+
+// general idea: for xScale1 & yScale1: creating scale functions
+//  that map data values to pixel values available to plot in  
+
+let yScale1 = d3.scaleLinear() // linear scale chosen because data in data1 in linear
+            .domain([0,maxY1]) // providing inputs for function
+            .range([height-margin.bottom,margin.top]); // providing outputs for function
+
+// TODO: What does each line of this code do? 
+let xScale1 = d3.scaleBand() // splits range into different buckets for x axis: matching no of values in data1: 7
+            .domain(d3.range(data1.length)) // providing inputs for function
+            .range([margin.left, width - margin.right]) // providing outputs for function
+            .padding(0.1); // set padding for the specified value in pixels in order to return x axis 
+
+// TODO: What does each line of this code do?  
+svg1.append("g") // g is a "placeholder" svg
+   .attr("transform", `translate(${margin.left}, 0)`) // ^ moves axis inside of left margin
+   .call(d3.axisLeft(yScale1)) // built in function for y axis given a scale function 
+   .attr("font-size", '20px'); // sets font size
+
+// TODO: What does each line of this code do? 
+svg1.append("g") // g is a "placeholder" svg
+    .attr("transform", `translate(0,${height - margin.bottom})`) // ^ moves axis to bottom of svg  
+    .call(d3.axisBottom(xScale1) // built in function for bottom axis given a scale function 
+            .tickFormat(i => data1[i].name))  // control tick labels: select each element from 'name'
+    .attr("font-size", '20px'); // set font size 
+
 
   // add our circles with styling 
   svg2.selectAll(".bar") // select all div ID's containing bar
